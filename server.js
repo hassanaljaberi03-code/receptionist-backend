@@ -38,10 +38,11 @@ app.post("/ai/lead", async (req, res) => {
     });
     if (!r.ok) throw new Error(`Make responded ${r.status}`);
     res.json({ ok: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ ok: false, error: "Server error" });
-  }
+    } catch (err) {
+  console.error("FEJL I BACKEND:", err);
+  res.status(500).json({ ok: false, error: err.message });
+}
+
 });
 
 app.get("/", (req, res) => res.json({ ok: true }));

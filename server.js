@@ -5,6 +5,16 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 app.use(express.json());
+// CORS - giv frontend lov til at kalde API'et fra browseren
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*"); 
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204); // svar hurtigt på preflight
+  }
+  next();
+});
 
 app.post("/ai/lead", async (req, res) => {
   const data = req.body;

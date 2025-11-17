@@ -171,43 +171,20 @@ app.post("/voice-recording", async (req, res) => {
 app.get("/", (req, res) => res.json({ ok: true }));
 
 // 5) voice endpoint til Camilla (ElevenLabs)
-app.post("/voice", async (req, res) => {
-  try {
-    // Hvad AI-receptionisten skal sige
-    const voiceText = "Hej, du taler med Camilla fra Vagt VVS. Hvordan kan jeg hjælpe dig i dag?";
+// 5) voice endpoint TEST – bare Twilio <Say>
+app.post("/voice", (req, res) => {
+  console.log("🚀 /voice endpoint blev ramt af Twilio!");
 
-   // Send teksten til ElevenLabs for at få Camillas stemme
-const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/4Rk1GmuxoAsKAbGxplXN`, {
-  method: "POST",
-  headers: {
-    "xi-api-key": process.env.ELEVENLABS_API_KEY,
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    text: voiceText,
-    model_id: "eleven_multilingual_v2",
-    voice_settings: { stability: 0.5, similarity_boost: 0.9 },
-  }),
-});
+  const twiml = `<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+  <Say language="da-DK" voice="Polly.Maja">
+    Hej, du taler med test-receptionisten fra Hassan. 
+    Hvis du hører denne besked, så virker webhooken.
+  </Say>
+</Response>`;
 
-    // Få lyd fra ElevenLabs og lav det til base64
-    const audioBuffer = await response.arrayBuffer();
-    const audioBase64 = Buffer.from(audioBuffer).toString("base64");
-
-    // Twilio spiller lyden
-    const twiml = `
-      <?xml version="1.0" encoding="UTF-8"?>
-      <Response>
-        <Play>data:audio/mpeg;base64,${audioBase64}</Play>
-      </Response>
-    `;
-
-    res.type("text/xml");
-    res.send(twiml);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error generating voice");
-  }
+  res.type("text/xml");
+  res.send(twiml);
 });
 
 // 6) start server

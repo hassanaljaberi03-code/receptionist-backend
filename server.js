@@ -67,10 +67,7 @@ app.post("/voice", (req, res) => {
   const twiml = `
     <Response>
       <Say voice="alice" language="da-DK">
-        Hej, du har ringet til Thomas fra vagt V V S.
-        Vi er optaget lige nu, men jeg kan tage dine oplysninger.
-        Sig dit navn, telefonnummer, og hvad problemet er.
-        Når du er færdig, så stop bare med at tale.
+        Dette er en testbesked fra Hassan. Hvis du hører denne besked, virker webhooken.
       </Say>
       <Record
         maxLength="60"
